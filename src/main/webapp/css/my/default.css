@@ -1,0 +1,133 @@
+a {
+    text-decoration: none !important;
+}
+
+ol,
+ul,
+li {
+    list-style: none
+}
+
+.mt-45 {
+    margin-top: 3rem !important;
+}
+
+.mb-45 {
+    margin-bottom: 3rem !important;
+}
+
+.ms-45 {
+    margin-right: 3rem !important;
+}
+
+.me-45 {
+    margin-left: 3rem !important;
+}
+
+.clear {
+    clear: both;
+}
+.w-10{
+	width:10% !important;
+}
+.w-20{
+	width:20% !important;
+}
+.w-30{
+	width:30% !important;
+}
+.w-40{
+	width:40% !important;
+}
+
+.pagination li:hover a {
+    color: #626976 !important;
+    border: 1px solid #1e293b !important;
+}
+
+.pagination li a {
+    border: 1px solid #fff !important;
+}
+
+
+
+/* --- footer ---*/
+
+.my-footer {
+    background-color: #1a549c;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    bottom:0;
+}
+
+.my-footer>div {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* ------header -------*/
+
+header {
+    padding: 14px 0 !important
+}
+
+.nav-link-title {
+    font-size: 16px !important;
+}
+
+#navbar-menu {
+    margin-left: 3rem !important;
+}
+
+li.nav-item {
+    margin-right: 0.5rem !important;
+}
+
+ul.navbar-nav li.dropdown:hover>div.dropdown-menu {
+    display: block;
+    top: 100% !important;
+}
+
+ul.navbar-nav li:hover .nav-link-title {
+    color: #206bc4 !important;
+    font-weight: 500 !important;
+}
+
+li>.dropdown-menu {
+    background-color: #e1ecf8 !important;
+}
+
+.navbar-nav>.dropdown-item:hover {
+    background-color: #fff !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #206ac496 !important;
+    color: #1e293b !important;
+}
+
+.navbar-expand-md.navbar-light .nav-item.active:after,
+.navbar-expand-md .navbar-light .nav-item.active:after {
+    bottom: -0.9rem !important;
+}
+
+li.nav-item .dropdown-item:hover {
+    background-color: #fff !important;
+}
+
+#user-box .dropdown-item:hover {
+    background-color: #e1ecf8 !important;
+}
+
+.nav-item .list-group-item:hover {
+    background-color: #e1ecf8 !important;
+}
+
+li.nav-item.active .nav-link-title {
+    color: #206bc4 !important;
+}
+
+/* ------header end -------*/

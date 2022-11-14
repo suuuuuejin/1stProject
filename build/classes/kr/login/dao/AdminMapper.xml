@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.login.dao.AdminMapper">
+	
+	<select id="adminList" resultType="kr.login.entity.Member">
+	select * from (select * from(select * from t_login A join t_user B on A.login_id = B.login_id) order by joindate desc)
+	</select>
+	
+	<select id="idList" resultType="kr.login.entity.Member">
+	select * from t_login join t_user using(login_id) where login_id like '%' || #{search} || '%' order by joindate desc
+	</select>
+	
+	<select id="nickList" resultType="kr.login.entity.Member">
+	select * from t_login join t_user using(login_id) where u_nick like '%' || #{search} || '%' order by joindate desc
+	</select>
+	
+	<select id="adminpageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	<select id="idSearchList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) where login_id like '%' || #{search} || '%' order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="nickSearchList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) where u_nick like '%' || #{search} || '%' order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="adminnoticeList" resultType="int">
+	select count(notice) from t_zw_board where notice is not null
+	</select>
+	
+	<select id="noticepageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.admin.entity.Notice">
+	select * from (select a.*, ROWNUM as rn from (select zw_seq as seq, zw_title as title, zw_content as content, zw_file as files, zw_date as day, login_id, zw_cnt as cnt, zw_likes as likes, notice from t_zw_board where notice is not null order by notice desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+
+</mapper>

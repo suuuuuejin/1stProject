@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- 선언문(PI) 엔터나 띄어쓰기 하면 오류남 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  <!-- dtd ... 스키마 : xml안에서 사용할 태그들이 정의되어있는 문서 -->
+<mapper namespace="kr.login.dao.GradeMapper"> <!-- 이 파일이 있는 패키지이름.xml파일 이름 -->
+ 	
+  <select id="gradeSearchListCount" parameterType="map" resultType ="int">
+	select count(*) from t_grade_board where ${val} like '%' ||#{text}||'%'
+</select>
+  
+  <select id="gradeSearchList" resultType="kr.grade.entity.grade_Board" parameterType="map">
+    select xx.grade_seq, xx.grade_title, xx.grade_content,xx.grade_file, xx.grade_regdate, xx.login_id, xx.grade_cnt,xx.grade_likes,xx.grade_cmtcnt from (select rownum as r, x.* from (select grade_seq,grade_title,grade_content,grade_file,grade_regdate,login_id,grade_cnt,grade_likes,(select count(*) from t_grade_comment c where c.grade_seq = b.grade_seq) as grade_cmtcnt from  t_grade_board b where  ${val} like '%' || #{text} || '%' order by grade_seq DESC) x) xx where xx.r between #{board.startCount} and #{board.endCount}  
+  </select>
+  
+ <select id="gradeAllComment" parameterType="int" resultType="kr.grade_comment.entity.Grade_comment">
+ 	select c.*, (select u_grade from t_login t where t.login_id=c.login_id) as u_grade from t_grade_comment c where grade_seq=#{grade_seq} order by grade_cmt_seq
+ </select>
+ 
+ <select id ="gradeLikeCheck" parameterType="map" resultType="int">
+ 	select count(*) from grade_likes where grade_seq = #{no} and login_id =#{id}
+ </select>
+
+ <select id ="gradeLikeCount" parameterType="int" resultType="int">
+ 	select count(*) from grade_likes where grade_seq=#{grade_seq}
+ </select>
+ 
+ <update id ="gradeUpdateLike" parameterType="map">
+ 	update t_grade_board set grade_likes = #{cnt} where grade_seq = #{grade_seq}
+ </update>
+ 
+ <insert id = "gradeLikeUpdate" parameterType="map">
+ 	insert into grade_likes values(#{no},#{id})
+ </insert>
+ 
+ 
+ <insert id="gradeBoardWrite" parameterType="kr.grade.entity.grade_Board">
+ 	insert into t_grade_board(grade_title, grade_headline, grade_content, grade_file, grade_regdate, login_id, grade_cnt, grade_likes) values(#{grade_title},#{grade_headline},#{grade_content},#{grade_file},SYSDATE,#{login_id},#{grade_cnt},#{grade_likes})
+ </insert>
+ 
+ <insert id="gradeCommentWrite" parameterType="kr.grade_comment.entity.Grade_comment">
+    insert into t_grade_comment(grade_seq, grade_cmt_content, grade_cmt_date, login_id) values(#{grade_seq},#{grade_cmt_content},sysdate,#{login_id})
+ </insert>
+ 
+ <delete id="gradeBoardDelete" parameterType="int">
+ 	delete from t_grade_board where grade_seq=#{grade_seq}
+ </delete>
+ 
+ <delete id="gradeCommentDelete" parameterType="int">
+ 	delete from t_grade_comment where grade_cmt_seq=#{num}
+ </delete>
+ 
+ <delete id="gradeCommentDelete2" parameterType="int">
+ 	delete from t_grade_comment where grade_seq=#{num}
+ </delete>
+ 
+ <delete id="gradeLikeDelete" parameterType="map">
+ 	delete from grade_likes where grade_seq=#{no} and login_id=#{id}
+ </delete>
+ <select id="gradeBoardView" parameterType="int" resultType="kr.grade.entity.grade_Board">
+ 	select * from t_grade_board where grade_seq=#{grade_seq}
+ </select>
+ 
+ <update id="gradeWritePoint" parameterType="String">
+ 	update t_login set u_point=u_point+5 where login_id=#{login_id}
+ </update>
+ 
+ <update id="gradeDeleteFile" parameterType="int">
+ 	update t_grade_board set grade_file = ' ' where grade_seq = #{grade_seq}
+ </update>
+ <update id="gradeBoardUpdate" parameterType="kr.grade.entity.grade_Board">
+ 	update t_grade_board set grade_title=#{grade_title},grade_content=#{grade_content},grade_file=#{grade_file} where grade_seq=#{grade_seq}
+ </update>
+ 
+  <update id="gradeBoardUpdate2" parameterType="kr.grade.entity.grade_Board">
+ 	update t_grade_board set grade_title=#{grade_title},grade_content=#{grade_content} where grade_seq=#{grade_seq}
+ </update>
+ 
+ <update id="gradeCommentUpdate" parameterType="kr.grade_comment.entity.Grade_comment">
+ 	update t_grade_comment set grade_cmt_content=#{grade_cmt_content} where grade_cmt_seq=#{grade_cmt_seq}
+ </update>
+ 
+ <update id="gradeCountUpdate" parameterType="int">
+ 	update t_grade_board set grade_cnt=grade_cnt+1 where grade_seq=#{grade_seq}
+ </update>
+ 	
+ 	<!-- 공지 -->
+ <update id="gradeUpdateNotice" parameterType="int">
+	update t_grade_board set notice = noticeseq.nextval where grade_seq=#{grade_seq}
+ </update>
+ 
+ <update id="gradeDeleteNotice" parameterType="int">
+ 	update t_grade_board set notice = null where grade_seq=#{grade_seq}
+ </update>
+ 
+ <select id="gradeNoticeList" resultType="kr.grade.entity.grade_Board">
+	select * from (select a.grade_seq, a.grade_title, a.grade_content, a.grade_file, a.grade_regdate, a.login_id, a.grade_cnt, a.grade_likes, a.notice, a.grade_headline, b.u_grade from t_grade_board a join t_login b on a.login_id = b.login_id where notice is not null order by notice desc) where ROWNUM &lt;= 3
+ </select> 
+ 
+ 
+ <!-- 등급제 게시판 -->
+  <select id="gradeListCount" resultType="int">
+ 	select count(grade_seq) from t_grade_board
+ </select> 
+ 	
+ <select id="gradeList" resultType="kr.grade.entity.grade_Board">
+ 	select * from (select a.*, (select count(*) from t_grade_comment c where c.grade_seq = a.grade_seq) as grade_cmtcnt, (select u_grade from t_login t where t.login_id= a.login_id) as u_grade, ROWNUM as rn from t_grade_board a order by a.grade_seq desc) where rn between #{startCount} and #{endCount}
+ </select> 	
+ 	
+ 	
+</mapper>

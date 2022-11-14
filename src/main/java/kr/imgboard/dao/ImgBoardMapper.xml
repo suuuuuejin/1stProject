@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.board.dao.BoardMapper">
+
+
+<select id="imgHlsearchListCount" parameterType="map" resultType ="int">
+	select count(*) from t_img_board where img_headline=#{headval}
+</select>
+ <select id="imgallListCount" resultType="int">
+	SELECT count(*) from t_img_board
+</select>
+
+<select id="imgsearchListCount" parameterType="map" resultType ="int">
+	select count(*) from t_img_board where ${val} like '%' ||#{text}||'%'
+</select>
+ <select id="imgallList" resultType="kr.imgboard.entity.Img_Board">
+   select b.*,(select count(*) from t_img_comment c where c.img_seq = b.img_seq) as img_cmtcnt from  t_img_board b order by img_seq desc
+ </select>
+ 
+ <select id="imgsomeList" resultType="kr.imgboard.entity.Img_Board" parameterType="kr.imgboard.entity.ImgBoardPaging">
+    select xx.img_seq, xx.img_title, xx.img_content,xx.img_file1,xx.img_file2, xx.img_file3,xx.img_file4,xx.img_file5,xx.img_regdate, xx.login_id,xx.img_headline, xx.img_cnt,xx.img_likes,xx.img_cmtcnt from (select rownum as r, x.* from (select img_seq,img_title,img_content,img_file1,img_file2,img_file3,img_file4,img_file5,img_headline,img_regdate,login_id,img_cnt,img_likes,(select count(*) from t_img_comment c where c.img_seq = b.img_seq) as img_cmtcnt from  t_img_board b order by img_seq DESC) x) xx where xx.r between #{startCount} and #{endCount}
+  </select>
+  
+  <select id="imgsearchList" resultType="kr.imgboard.entity.Img_Board" parameterType="map">
+    select xx.img_seq, xx.img_title, xx.img_content,xx.img_file1,xx.img_file2, xx.img_file3,xx.img_file4,xx.img_file5,xx.img_regdate, xx.login_id, xx.img_cnt,xx.img_headline,xx.img_likes,xx.img_cmtcnt from (select rownum as r, x.* from (select img_seq,img_title,img_content,img_file1,img_file2,img_file3,img_file4,img_file5,img_headline,img_regdate,login_id,img_cnt,img_likes,(select count(*) from t_img_comment c where c.img_seq = b.img_seq) as img_cmtcnt from  t_img_board b where  ${val} like '%' ||#{text}||'%' order by img_seq DESC) x) xx where xx.r between #{board.startCount} and #{board.endCount}  
+  </select>
+  
+  <select id="imgHlSearchList" resultType="kr.imgboard.entity.Img_Board" parameterType="map">
+    select xx.img_seq, xx.img_title, xx.img_content,xx.img_file1,xx.img_file2, xx.img_file3,xx.img_file4,xx.img_file5,xx.img_regdate, xx.login_id, xx.img_cnt,xx.img_headline,xx.img_likes,xx.img_cmtcnt from (select rownum as r, x.* from (select img_seq,img_title,img_content,img_file1,img_file2,img_file3,img_file4,img_file5,img_headline,img_regdate,login_id,img_cnt,img_likes,(select count(*) from t_img_comment c where c.img_seq = b.img_seq) as img_cmtcnt from  t_img_board b where img_headline=#{headval} order by img_seq DESC) x) xx where xx.r between #{board.startCount} and #{board.endCount}  
+  </select>
+
+ 
+ <select id="imgallComment" parameterType="int" resultType="kr.img_comment.entity.Img_comment">
+ 	select c.*, (select u_grade from t_login t where t.login_id=c.login_id) as u_grade from t_img_comment c where img_seq=#{img_seq} order by img_cmt_seq
+
+ </select>
+ 
+ <select id ="imglikeCheck" parameterType="map" resultType="int">
+ 	select count(*) from imglikes where img_seq = #{no} and login_id =#{id}
+ </select>
+
+ <select id ="imglikeCount" parameterType="int" resultType="int">
+ 	select count(*) from imglikes where img_seq=#{img_seq}
+ </select>
+ 
+ <update id ="imgupdateLike" parameterType="map">
+ 	update t_img_board set img_likes = #{cnt} where img_seq = #{img_seq}
+ </update>
+ 
+ <insert id = "imglikeUpdate" parameterType="map">
+ 	insert into imglikes values(#{no},#{id})
+ </insert>
+ 
+ 
+ <insert id="imgboardWrite" parameterType="kr.imgboard.entity.Img_Board">
+ 	insert into t_img_board(img_title, img_content, img_file1,img_file2,img_file3,img_file4,img_file5, img_regdate, login_id, img_cnt, img_likes,img_headline) values(#{img_title},#{img_content},#{img_file1},#{img_file2},#{img_file3},#{img_file4},#{img_file5},SYSDATE,#{login_id},#{img_cnt},#{img_likes},#{img_headline})
+ </insert>
+ 
+ <insert id="imgcommentWrite" parameterType="kr.img_comment.entity.Img_comment">
+    insert into t_img_comment(img_seq,img_cmt_content, img_cmt_date, login_id) values(#{img_seq},#{img_cmt_content},sysdate,#{login_id})
+ </insert>
+ 
+ <delete id="imgboardDelete" parameterType="int">
+ 	delete from t_img_board where img_seq=#{img_seq}
+ </delete>
+ 
+ <delete id="imgcommentDelete" parameterType="int">
+ 	delete from t_img_comment where img_cmt_seq=#{num}
+ </delete>
+ 
+ <delete id="imgcommentDelete2" parameterType="int">
+ 	delete from t_img_comment where img_seq=#{num}
+ </delete>
+ 
+ <delete id="imglikeDelete" parameterType="map">
+ 	delete from imglikes where img_seq=#{no} and login_id=#{id}
+ </delete>
+ <select id="imgboardView" parameterType="int" resultType="kr.imgboard.entity.Img_Board">
+ 	select * from t_img_board where img_seq=#{img_seq}
+ </select>
+ 
+ <update id="imgwritePoint" parameterType="String">
+ 	update t_login set u_point=u_point+5 where login_id=#{login_id}
+ </update>
+ 
+ <update id="imgcommentPoint" parameterType="String">
+ 	update t_login set u_point=u_point+3 where login_id=#{login_id}
+ </update>
+ <update id="imgdeleteFile" parameterType="map">
+ 	update t_img_board set ${filenum} = ' ' where img_seq = #{img_seq}
+ </update>
+ <update id="imgboardUpdatefile1" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_file1=#{img_file1} where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgboardUpdatefile2" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_file2=#{img_file2} where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgboardUpdatefile3" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_file3=#{img_file3} where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgboardUpdatefile4" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_file4=#{img_file4} where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgboardUpdatefile5" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_file5=#{img_file5} where img_seq=#{img_seq}
+ </update>
+ 
+  <update id="imgboardUpdate" parameterType="kr.imgboard.entity.Img_Board">
+ 	update t_img_board set img_title=#{img_title},img_content=#{img_content},img_headline=#{img_headline} where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgcommentUpdate" parameterType="kr.img_comment.entity.Img_comment">
+ 	update t_img_comment set img_cmt_content=#{img_cmt_content} where img_cmt_seq=#{img_cmt_seq}
+ </update>
+ 
+ <update id="imgcountUpdate" parameterType="int">
+ 	update t_img_board set img_cnt=img_cnt+1 where img_seq=#{img_seq}
+ </update>
+ 
+ <!-- 공지 -->
+ <update id="imgUpdateNotice" parameterType="int">
+	update t_img_board set notice = noticeseq.nextval where img_seq=#{img_seq}
+ </update>
+ 
+ <update id="imgDeleteNotice" parameterType="int">
+ 	update t_img_board set notice = null where img_seq=#{img_seq}
+ </update>
+ 
+ <select id="imgNoticeList" resultType="kr.img_comment.entity.Img_comment">
+	select * from (select a.img_seq, a.img_title, a.img_content, a.img_file1, a.img_regdate, a.login_id, a.img_cnt, a.img_likes, a.notice, a.img_headline, b.u_grade from t_img_board a join t_login b on a.login_id = b.login_id where notice is not null order by notice desc) where ROWNUM &lt;= 3
+ </select> 
+ 
+ <select id="mainImg" resultType="kr.imgboard.entity.Img_Board" parameterType="kr.imgboard.entity.ImgBoardPaging">
+    select xx.img_seq, xx.img_title, xx.img_content,xx.img_file1,xx.img_file2, xx.img_file3,xx.img_file4,xx.img_file5,xx.img_regdate, xx.login_id,xx.img_headline, xx.img_cnt,xx.img_likes,xx.img_cmtcnt from (select rownum as r, x.* from (select img_seq,img_title,img_content,img_file1,img_file2,img_file3,img_file4,img_file5,img_headline,img_regdate,login_id,img_cnt,img_likes,(select count(*) from t_img_comment c where c.img_seq = b.img_seq) as img_cmtcnt from  t_img_board b order by img_seq DESC) x) xx where xx.r &lt;= 3
+  </select>
+ 
+ </mapper> 

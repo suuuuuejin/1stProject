@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.login.dao.AdminMapper">
+	
+	<select id="adminList" resultType="kr.login.entity.Member">
+	select * from (select * from(select * from t_login A join t_user B on A.login_id = B.login_id) order by joindate desc)
+	</select>
+	
+	<select id="idList" resultType="kr.login.entity.Member">
+	select * from t_login join t_user using(login_id) where login_id like '%' || #{search} || '%' order by joindate desc
+	</select>
+	
+	<select id="nickList" resultType="kr.login.entity.Member">
+	select * from t_login join t_user using(login_id) where u_nick like '%' || #{search} || '%' order by joindate desc
+	</select>
+	
+	<select id="adminpageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	<select id="idSearchList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) where login_id like '%' || #{search} || '%' order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="nickSearchList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.login.entity.Member">
+	select * from (select a.*, ROWNUM as rn from (select * from t_login join t_user using(login_id) where u_nick like '%' || #{search} || '%' order by joindate desc) a where ROWNUM &lt;= #{list_end}) where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="adminnoticeList" resultType="int">
+	select count(notice) from t_zw_board where notice is not null
+	</select>
+	
+	<select id="zwnoticepageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.zw_board.entity.Zw_Board">
+	select * from (select a.zw_seq, a.zw_title, a.zw_content, a.zw_file, a.zw_date, a.login_id, a.zw_cnt, a.zw_likes, a.notice, a.zw_headline, b.u_grade, ROWNUM as rn from t_zw_board a join t_login b on a.login_id = b.login_id where notice is not null and ROWNUM &lt;= #{list_end} order by notice desc) a where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="tonoticepageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.toBoard.entity.ToBoard">
+	select * from (select a.tb_seq, a.tb_title, a.tb_content, a.tb_file, a.tb_regdate, a.login_id, a.tb_cnt, a.tb_likes, a.notice, a.tb_headline, b.u_grade, ROWNUM as rn from t_together_board a join t_login b on a.login_id = b.login_id where notice is not null and ROWNUM &lt;= #{list_end} order by notice desc) where rn &gt;= #{list_start}
+	</select>
+	
+	<select id="gradenoticepageList" parameterType="kr.admin.entity.AdminPaging" resultType="kr.grade.entity.grade_Board">
+	select * from (select a.grade_seq, a.grade_title, a.grade_content, a.grade_file, a.grade_regdate, a.login_id, a.grade_cnt, a.grade_likes, a.notice, a.grade_headline, b.u_grade, ROWNUM as rn from t_grade_board a join t_login b on a.login_id = b.login_id where notice is not null and ROWNUM &lt;= #{list_end} order by notice desc) where rn &gt;= #{list_start}
+	</select>
+	
+</mapper>

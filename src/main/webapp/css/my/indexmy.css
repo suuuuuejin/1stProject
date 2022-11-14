@@ -1,0 +1,201 @@
+@import url(default.css);
+
+a,
+a:hover {
+    color: inherit;
+}
+
+/* main header */
+.wrap {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+}
+
+
+
+header .container {
+    background-color: #fff;
+    padding: 1rem 2.5rem !important;
+    border-radius: 20px !important;
+}
+
+/*----main bg ----*/
+.bg-img {
+    width: 100%;
+    height: 26rem;
+
+
+}
+
+.bg-area-wrap {
+    width: 100%;
+    height: 26rem;
+    position: absolute;
+    overflow: hidden;
+    background-color: #151515;
+}
+
+.main-d {
+    margin-top: 7rem;
+}
+
+.main-text {
+    color: #f5ea50;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 6rem;
+
+}
+
+.main-img-1 {
+    margin-top: 26px;
+    height: 84px;
+    width: 88%;
+    background-image: url('../../img/my/m-1.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.main-img-2 {
+    margin-top: 26px;
+    width: 113%;
+    height: 84px;
+    background-image: url('../../img/my/m-2.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+/* -- challenge -- */
+
+.my-title {
+    position: relative;
+}
+
+.my-title h2 {
+    z-index: 1;
+    position: absolute;
+    font-size: 2.1rem;
+    font-weight: 700;
+}
+
+.ud {
+    top: 1.5rem;
+    /* left: 13rem; */
+    position: absolute;
+    width: 9.7rem;
+    background-color: #cce3ff;
+    height: 1.5rem;
+}
+
+.wd {
+    width: 19.5rem !important;
+}
+
+.my-title h2 span {
+    font-weight: 300;
+}
+
+/* -- 갤러리 영역 -- */
+
+.container-wrap {
+    background-color: white;
+    width: 100%;
+}
+
+
+.rdm-btn:hover {
+    color: #ffffff !important;
+}
+
+.container .card:hover {
+    border: 1px solid #206bc4;
+    transition: 0.2s;
+}
+
+.container .card:hover>div {
+    background-color: #e1ecf894;
+    transition: 0.2s;
+}
+
+.mt-45 .card:hover {
+    border: 1px solid #206bc4;
+    transition: 0.2s;
+}
+
+.mt-45 .card:hover>div {
+    background-color: #e1ecf894;
+    transition: 0.2s;
+}
+
+/*-- md bg --*/
+.bl {
+    background-color: #151515 !important;
+}
+
+.main-img-3 {
+    margin-top: 26px;
+    height: 84px;
+    width: 91%;
+    float: right;
+    background-image: url('../../img/my/m-3.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+}
+
+.main-img-4 {
+    margin-top: 26px;
+    width: 113%;
+    height: 84px;
+    background-image: url('../../img/my/m-4.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.bg-text {
+    color: #fff;
+    text-align: right;
+    margin-top: 26px;
+    overflow: hidden;
+    line-height: 17px;
+}
+
+/* weekley best */
+
+.card-title a:hover {
+    text-decoration: underline !important;
+}
+
+.hei {
+    height: 4rem;
+    overflow: hidden;
+}
+
+.bgbg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-image: url(../../img/my/visual2.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+.bgbg::before {
+    content: "";
+    background-color: #fff;
+    background-size: cover;
+    opacity: 0.75;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.col-auto {
+    z-index: 1000;
+}

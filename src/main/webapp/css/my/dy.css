@@ -1,0 +1,61 @@
+#l{
+    color: red;
+}
+
+#view  tr:nth-child(-n+4)  td:nth-child(odd){
+    background-color: #d9ebf9;
+    width: 150px !important;
+    
+}
+#view {
+	border-collapse: separate !important;
+    border-radius: 10px;
+    border-style: hidden;
+    
+}
+
+#likebtn{
+    text-align: center;
+}
+
+#likebtn2{
+    border : 1px solid #4299e1;
+    font-size: 15px;
+}
+
+#comment{
+	overflow:hidden;
+	height:auto;
+}
+
+input::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.fl-l {
+    float: left !important;
+}
+
+#pro-2,
+#pro-3,
+#pro-4,
+#pro-5 {
+    display: none;
+}
+
+.w-40 {
+    width: 45% !important;
+}
+
+#upimg {
+	width : 100px;
+}
+
+.bal{
+	width : 15% !important;
+}
+#s{
+	height: 100px;
+}

@@ -1,0 +1,22 @@
+input::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.fl-l {
+    float: left !important;
+}
+
+#pro-2,
+#pro-3,
+#pro-4,
+#pro-5 {
+	}
+#pro-4 {
+    display: none;
+}
+.w-40 {
+    width: 45% !important;
+}
+

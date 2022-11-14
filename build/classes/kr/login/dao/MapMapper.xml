@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.login.dao.MapMapper">
+
+	<insert id="map" parameterType="kr.map.entity.Mapvo">
+		insert into zw_shop values(zw_shopSeq.NEXTVAL,#{store_name}, #{store_addr}, #{homepage})
+	</insert>
+	<insert id="vmap" parameterType="kr.map.entity.Mapvo">
+		insert into vegan_shop values(vegan_shopseq.NEXTVAL,#{store_name}, #{store_addr}, #{homepage})
+	</insert>
+	
+	<select id="mapList" resultType="kr.map.entity.Mapvo">
+	select store_name, store_addr, homepage, ROWNUM as store_num from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop))
+	</select>
+	
+	<select id="mapCount" resultType="int">
+	select count(*) from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop))
+	</select>
+	
+	<select id="pageList" parameterType="kr.map.entity.MapPaging" resultType="kr.map.entity.Mapvo">
+	select * from(select store_name, store_addr, homepage, ROWNUM as store_num from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop)) where ROWNUM &lt;= #{list_end} ) where store_num &gt;= #{list_start}
+	</select>
+	
+	<select id="vpageList" parameterType="kr.map.entity.MapPaging" resultType="kr.map.entity.Mapvo">
+	select * from (select a.*, ROWNUM as RNUM from (select * from vegan_shop order by store_num desc) a where ROWNUM &lt;= #{list_end} ) where rnum &gt;= #{list_start} 
+	</select>
+	
+	<select id="zwpageList" parameterType="kr.map.entity.MapPaging" resultType="kr.map.entity.Mapvo">
+	select * from (select a.*, ROWNUM as RNUM from (select * from zw_shop order by store_num desc) a where ROWNUM &lt;= #{list_end} ) where rnum &gt;= #{list_start} 
+	</select>
+
+	<select id="m_searchList" parameterType="String" resultType="kr.map.entity.Mapvo">
+	select * from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop)) where store_name like '%' ||#{search}||'%'
+	</select>
+	
+	<select id="t_searchPage" parameterType="kr.map.entity.MapPaging" resultType="kr.map.entity.Mapvo">
+	select * from (select * from(select a.*, ROWNUM as store_num from (select * from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop)) where store_name like '%' ||#{store_search}||'%' )a) where ROWNUM &lt;= #{list_end}) where store_num &gt;= #{list_start}
+	</select>
+	
+	<select id="a_searchPage" parameterType="kr.map.entity.MapPaging" resultType="kr.map.entity.Mapvo">
+	select * from(select * from(select a.*, ROWNUM as store_num from (select * from ((select store_name, store_addr, homepage from zw_shop) union all (select store_name, store_addr, homepage from vegan_shop))where store_addr like '%' ||#{store_search}||'%' )a) where ROWNUM &lt;= #{list_end})where store_num &gt;= #{list_start}
+	</select>
+
+</mapper>

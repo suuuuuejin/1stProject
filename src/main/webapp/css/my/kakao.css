@@ -1,0 +1,10 @@
+.login-kakao-icon {
+    font-size: 18px;
+}
+.login-kakao{
+    background-color: #f9e000 !important;
+}
+
+.page-login {
+    min-height: 90vh !important;
+}
